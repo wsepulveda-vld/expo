@@ -1,0 +1,14 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -I . --packages bash nix-prefetch-git
+set -euo pipefail
+
+repo=https://github.com/NixOS/nixpkgs-channels.git
+branch="${1:-nixos-unstable}" # Latest nixpkgs commit that passes hydra.nixos.org
+
+# Update nixpkgs pin
+pin=$(nix-prefetch-git --url $repo --rev "refs/heads/${branch}")
+# Split into two steps so fetch errors don't delete file
+echo "$pin" > nixpkgs.json
+
+# Update all yarn.lock files
+nix run -f . fd yarn parallel bash --command bash -c "fd -a yarn.lock | xargs -n 1 dirname | parallel 'cd {} && yarn install --force'"
