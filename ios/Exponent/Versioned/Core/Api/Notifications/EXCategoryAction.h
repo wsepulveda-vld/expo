@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EXCategoryActionWithTextInput : EXCategoryAction
 
-@property (strong, nonatomic) NSString *defaultText;
+@property (strong, nonatomic) NSString *placeholderText;
 @property (strong, nonatomic) NSString *buttonName;
 
 @end

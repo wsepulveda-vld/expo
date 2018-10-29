@@ -36,7 +36,7 @@ export default class UserNotificationsScreen extends React.Component {
       },
     };
 
-    await Notifications.putCategoryAsync('super-category', [action, textAction]);
+    await Notifications.createCategoryAsync('super-category', [action, textAction]);
 
     this._notificationListener = Notifications.addListener(e => {
       this.setState({ gotNotification: true, receivedEvent: JSON.stringify(e) });
@@ -85,7 +85,7 @@ export default class UserNotificationsScreen extends React.Component {
         data: { scheduledAt: new Date().getTime() },
       },
       {
-        timeInterval: 10,
+        intervalMs: 10000,
       }
     );
   };

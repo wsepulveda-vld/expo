@@ -92,7 +92,7 @@ RCT_EXPORT_METHOD(presentLocalNotification:(NSDictionary *)payload
   }];
 }
 
-RCT_EXPORT_METHOD(putCategory: (NSString *)categoryId
+RCT_EXPORT_METHOD(createCategory: (NSString *)categoryId
                   actions: (NSArray *)actions
                   resolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(__unused RCTPromiseRejectBlock)reject)
@@ -163,7 +163,7 @@ RCT_EXPORT_METHOD(scheduleLocalNotificationWithTimeInterval:(NSDictionary *)payl
   }
   UNMutableNotificationContent* content = [self _localNotificationFromPayload:payload];
 
-  int timeInterval = [((NSNumber *)options[@"timeInterval"]) intValue];
+  double timeInterval = [((NSNumber *)options[@"intervalMs"]) doubleValue]/1000.0;
   UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInterval
                                                                                                   repeats:repeats];
   UNNotificationRequest* request = [UNNotificationRequest

@@ -40,7 +40,7 @@
   if ( self = [super initWithParams: params]) {
     NSDictionary * textInputParams = params[@"textInput"];
     _buttonName = textInputParams[@"submitButtonTitle"];
-    _defaultText = textInputParams[@"placeholder"];
+    _placeholderText = textInputParams[@"placeholder"];
   }
   return self;
 }
@@ -50,7 +50,7 @@
                                                        title:self.actionName
                                                      options:self.flags
                                         textInputButtonTitle:self.buttonName
-                                        textInputPlaceholder:self.defaultText];
+                                        textInputPlaceholder:self.placeholderText];
 }
 
 @end

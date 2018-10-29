@@ -43,7 +43,7 @@ type Channel = {
 };
 
 type IntervalTrigger = {
-  timeInterval: number;
+  intervalMs?: number;
   repeats?: boolean;
 };
 
@@ -209,8 +209,8 @@ export default {
   },
 
   // User passes set of actions titles.
-  putCategoryAsync(categoryId: string, actions: Array<ActionType>): Promise<void> {
-    return ExponentNotifications.putCategory(categoryId, actions);
+  createCategoryAsync(categoryId: string, actions: Array<ActionType>): Promise<void> {
+    return ExponentNotifications.createCategory(categoryId, actions);
   },
 
   /* Re-export */
@@ -285,14 +285,14 @@ export default {
   },
 
   async scheduleLocalNotificationWithMatchIOSAsync(notification: LocalNotification, options: DateMatchingTrigger) {
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
        throw new Error("This function is supported only on iOS.");
     }
     return ExponentNotifications.scheduleLocalNotification(notification, options);
   },
 
   async scheduleLocalNotificationWithTimeIntervalIOSAsync(notification: LocalNotification, options: IntervalTrigger) {
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
        throw new Error("This function is supported only on iOS.");
     }
     return ExponentNotifications.scheduleLocalNotificationWithTimeInterval(notification, options);

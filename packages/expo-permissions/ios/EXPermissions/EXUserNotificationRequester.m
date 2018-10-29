@@ -3,7 +3,7 @@
 #import <EXPermissions/EXUserNotificationRequester.h>
 
 #import <UIKit/UIKit.h>
-#import <EXPermissionUserNotificationCenter.h>
+#import <EXUserNotificationCenterProxyInVanillaApps.h>
 
 @interface EXUserNotificationRequester ()
 
@@ -23,8 +23,8 @@
   return self;
 }
 
-+ (id<EXUserNotificationsPermissionsCenterInterface>) getCenterWithModuleRegistry:(EXModuleRegistry *) moduleRegistry {
-  return [moduleRegistry getModuleImplementingProtocol:@protocol(EXUserNotificationsPermissionsCenterInterface)];
++ (id<EXUserNotificationCenterProxyInterface>) getCenterWithModuleRegistry:(EXModuleRegistry *) moduleRegistry {
+  return [moduleRegistry getModuleImplementingProtocol:@protocol(EXUserNotificationCenterProxyInterface)];
 }
 
 + (NSDictionary *)permissionsWithModuleRegistry:(EXModuleRegistry *)moduleRegistry
@@ -44,8 +44,10 @@
 
     if (settings.authorizationStatus == UNAuthorizationStatusAuthorized) {
       status = EXPermissionStatusGranted;
-    } else {
+    } else if (settings.authorizationStatus == UNAuthorizationStatusDenied) {
       status = EXPermissionStatusDenied;
+    } else {
+      status = EXPermissionStatusUndetermined;
     }
     dispatch_semaphore_signal(sem);
   }];

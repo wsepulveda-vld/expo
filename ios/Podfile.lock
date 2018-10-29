@@ -955,9 +955,9 @@ DEPENDENCIES:
   - EXSMS (from `../packages/expo-sms/ios`)
   - Fabric (~> 1.6)
   - FBAudienceNetwork (= 4.99.0)
-  - FBSDKCoreKit (= 4.37.0)
-  - FBSDKLoginKit (= 4.37.0)
-  - FBSDKShareKit (= 4.37.0)
+  - FBSDKCoreKit (~> 4.28)
+  - FBSDKLoginKit (~> 4.28)
+  - FBSDKShareKit (~> 4.28)
   - Folly (from `../react-native-lab/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../react-native-lab/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils (~> 2.1.0)
@@ -1433,6 +1433,6 @@ SPEC CHECKSUMS:
   yogaABI29_0_0: 4fdf5bbd444d2968ec42ccadec97b02c672eda80
   yogaABI30_0_0: 4c86e39466368a6b018b8b78aeb654b6620512a1
 
-PODFILE CHECKSUM: eff12dfd239da8973a1bfd9579afe90c13ae579c
+PODFILE CHECKSUM: 0c24e5e11b884a42f0632321e36c5027069393e4
 
 COCOAPODS: 1.5.3

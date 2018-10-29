@@ -10,7 +10,7 @@
 
 #import "EXScopedReactNativeAdapter.h"
 #import "EXModuleRegistryBinding.h"
-#import "EXPermissionUserNotificationCenterExpoKit.h"
+#import "EXUserNotificationCenterProxyInExpoClient.h"
 
 @implementation EXScopedModuleRegistryAdapter
 
@@ -30,7 +30,7 @@
   EXScopedReactNativeAdapter *reactNativeAdapter = [[EXScopedReactNativeAdapter alloc] init];
   [moduleRegistry registerInternalModule:reactNativeAdapter];
 
-  EXPermissionUserNotificationCenterExpoKit *userNotificationCenter = [EXPermissionUserNotificationCenterExpoKit sharedInstance];
+  EXUserNotificationCenterProxyInExpoClient *userNotificationCenter = [EXUserNotificationCenterProxyInExpoClient sharedInstance];
   [moduleRegistry registerInternalModule:userNotificationCenter];
 
   NSArray<id<RCTBridgeModule>> *bridgeModules = [self extraModulesForModuleRegistry:moduleRegistry];
