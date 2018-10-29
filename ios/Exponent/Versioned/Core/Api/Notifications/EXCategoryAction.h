@@ -7,8 +7,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EXCategoryAction : NSObject
 
-@property (assign, nonatomic) NSString *actionId;
-@property (assign, nonatomic) NSString *actionName;
+@property (strong, nonatomic) NSString *actionId;
+@property (strong, nonatomic) NSString *actionName;
 @property (assign, nonatomic) int flags;
 - (UNNotificationAction *) getUNNotificationAction;
 + (instancetype)parseFromParams:(NSDictionary *) array;
@@ -17,8 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EXCategoryActionWithTextInput : EXCategoryAction
 
-@property (assign, nonatomic) NSString *defaultText;
-@property (assign, nonatomic) NSString *buttonName;
+@property (strong, nonatomic) NSString *defaultText;
+@property (strong, nonatomic) NSString *buttonName;
 
 @end
 

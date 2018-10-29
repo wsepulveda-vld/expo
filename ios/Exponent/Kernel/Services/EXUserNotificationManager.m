@@ -4,6 +4,7 @@
 #import "EXKernel.h"
 #import "EXRemoteNotificationManager.h"
 #import "EXEnvironment.h"
+#import "EXNotificationScoper.h"
 
 @interface EXUserNotificationManager()
 @end
@@ -39,7 +40,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
     } else if (![response.actionIdentifier isEqualToString:UNNotificationDefaultActionIdentifier]) {
       actionId = response.actionIdentifier;
       if (![EXEnvironment sharedEnvironment].isDetached) {
-        actionId = [actionId componentsSeparatedByString:@":"][1];
+        actionId = [EXNotificationScoper split:actionId][1];
       }
     }
     

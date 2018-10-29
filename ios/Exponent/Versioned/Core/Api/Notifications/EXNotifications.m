@@ -6,28 +6,13 @@
 #import "EXUtil.h"
 #import "EXCategoryAction.h"
 #import "EXEnvironment.h"
+#import "EXNotificationScoper.h"
 
 #import <React/RCTUtils.h>
 #import <React/RCTConvert.h>
 
 #import <EXConstantsInterface/EXConstantsInterface.h>
 #import <UserNotifications/UserNotifications.h>
-
-@implementation RCTConvert (NSCalendarUnit)
-
-RCT_ENUM_CONVERTER(NSCalendarUnit,
-                   (@{
-                      @"year": @(NSCalendarUnitYear),
-                      @"month": @(NSCalendarUnitMonth),
-                      @"week": @(NSCalendarUnitWeekOfYear),
-                      @"day": @(NSCalendarUnitDay),
-                      @"hour": @(NSCalendarUnitHour),
-                      @"minute": @(NSCalendarUnitMinute)
-                      }),
-                   0,
-                   integerValue);
-
-@end
 
 @interface EXNotifications ()
 
@@ -96,20 +81,15 @@ RCT_EXPORT_METHOD(presentLocalNotification:(NSDictionary *)payload
                   rejecter:(__unused RCTPromiseRejectBlock)reject)
 {
   UNMutableNotificationContent* content = [self _localNotificationFromPayload:payload];
+  UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:content.userInfo[@"id"] content:content trigger:nil];
 
-  [EXUtil performSynchronouslyOnMainThread:^{
-    UNNotificationRequest* request = [UNNotificationRequest requestWithIdentifier:content.userInfo[@"id"]
-                                                                          content:content
-                                                                          trigger:nil];
-    [[EXUserNotificationCenter sharedInstance] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-      if (error != nil) {
-        reject(@"E_NOTIF", [NSString stringWithFormat:@"Could not add a notification request: %@", error.localizedDescription], error);
-      } else {
-        resolve(content.userInfo[@"id"]);
-      }
-    }];
+  [[EXUserNotificationCenter sharedInstance] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+    if (error != nil) {
+      reject(@"E_NOTIF", [NSString stringWithFormat:@"Could not add a notification request: %@", error.localizedDescription], error);
+    } else {
+      resolve(content.userInfo[@"id"]);
+    }
   }];
-
 }
 
 RCT_EXPORT_METHOD(putCategory: (NSString *)categoryId
@@ -182,21 +162,19 @@ RCT_EXPORT_METHOD(scheduleLocalNotificationWithTimeInterval:(NSDictionary *)payl
     repeats = [options[@"repeats"] boolValue];
   }
   UNMutableNotificationContent* content = [self _localNotificationFromPayload:payload];
-  
-  [EXUtil performSynchronouslyOnMainThread:^{
-    int timeInterval = [((NSNumber *)options[@"timeInterval"]) intValue];
-    UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInterval
-                                                                                                    repeats:repeats];
-    UNNotificationRequest* request = [UNNotificationRequest
-                                      requestWithIdentifier:content.userInfo[@"id"] content:content trigger:trigger];
-    [[EXUserNotificationCenter sharedInstance] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
-      if (error != nil) {
-        NSLog(@"%@", error.localizedDescription);
-        reject(@"Could not make notification request", error.localizedDescription, error);
-      } else {
-        resolve(content.userInfo[@"id"]);
-      }
-    }];
+
+  int timeInterval = [((NSNumber *)options[@"timeInterval"]) intValue];
+  UNTimeIntervalNotificationTrigger* trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:timeInterval
+                                                                                                  repeats:repeats];
+  UNNotificationRequest* request = [UNNotificationRequest
+                                    requestWithIdentifier:content.userInfo[@"id"] content:content trigger:trigger];
+  [[EXUserNotificationCenter sharedInstance] addNotificationRequest:request withCompletionHandler:^(NSError * _Nullable error) {
+    if (error != nil) {
+      NSLog(@"%@", error.localizedDescription);
+      reject(@"Could not make notification request", error.localizedDescription, error);
+    } else {
+      resolve(content.userInfo[@"id"]);
+    }
   }];
 }
 
@@ -204,24 +182,15 @@ RCT_EXPORT_METHOD(cancelScheduledNotification:(NSString *)uniqueId)
 {
   uniqueId = [self getScopedIdIfDetached:uniqueId];
 
-  [EXUtil performSynchronouslyOnMainThread:^{
-    [[EXUserNotificationCenter sharedInstance] removePendingNotificationRequestsWithIdentifiers:@[uniqueId]];
-  }];
+  [[EXUserNotificationCenter sharedInstance] removePendingNotificationRequestsWithIdentifiers:@[uniqueId]];
 }
 
 RCT_REMAP_METHOD(cancelAllScheduledNotifications,
                  cancelAllScheduledNotificationsWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject)
-{
-  [self cancelAllScheduledNotificationsAsyncWithResolver:resolve rejecter:reject];
-}
-
-RCT_REMAP_METHOD(cancelAllScheduledNotificationsAsync,
-                 cancelAllScheduledNotificationsAsyncWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(__unused RCTPromiseRejectBlock)reject)
 {
   [[EXUserNotificationCenter sharedInstance] getPendingNotificationRequestsWithCompletionHandler:
-    ^(NSArray<UNNotificationRequest *> * _Nonnull __strong requests){
+    ^(NSArray<UNNotificationRequest *> * _Nonnull requests){
       for (UNNotificationRequest * request in requests) {
         if ([request.content.userInfo[@"experienceId"] isEqualToString:self.experienceId]) {
           [[EXUserNotificationCenter sharedInstance] removePendingNotificationRequestsWithIdentifiers:@[request.content.userInfo[@"id"]]];
@@ -236,24 +205,24 @@ RCT_REMAP_METHOD(cancelAllScheduledNotificationsAsync,
 // TODO: Make this read from the kernel instead of UIApplication for the main Exponent app
 
 RCT_REMAP_METHOD(getBadgeNumberAsync,
-                 getBadgeNumberAsyncWithResolver:(RCTPromiseResolveBlock)resolve
+                 getBadgeNumberAsyncWithResolver:(__strong RCTPromiseResolveBlock)resolve
                  rejecter:(__unused RCTPromiseRejectBlock)reject)
 {
   __block NSInteger badgeNumber;
-  [EXUtil performSynchronouslyOnMainThread:^{
+  dispatch_async(dispatch_get_main_queue(), ^{
     badgeNumber = RCTSharedApplication().applicationIconBadgeNumber;
-  }];
-  resolve(@(badgeNumber));
+    resolve(@(badgeNumber));
+  });
 }
 
 RCT_EXPORT_METHOD(setBadgeNumberAsync:(nonnull NSNumber *)number
-                  resolver:(RCTPromiseResolveBlock)resolve
+                  resolver:(__strong RCTPromiseResolveBlock)resolve
                   rejecter:(__unused RCTPromiseRejectBlock)reject)
 {
-  [EXUtil performSynchronouslyOnMainThread:^{
+  dispatch_async(dispatch_get_main_queue(), ^{
     RCTSharedApplication().applicationIconBadgeNumber = number.integerValue;
-  }];
-  resolve(nil);
+    resolve(nil);
+  });
 }
 
 #pragma mark - internal
@@ -291,7 +260,7 @@ RCT_EXPORT_METHOD(setBadgeNumberAsync:(nonnull NSNumber *)number
   if ([EXEnvironment sharedEnvironment].isDetached) {
     return identifier;
   }
-  return [NSString stringWithFormat:@"%@%@%@", self.experienceId, @":", identifier];
+  return [EXNotificationScoper scope:identifier withExperienceId:self.experienceId];
 }
 
 - (NSDateComponents *)getDateFromOptions:(NSDictionary *) options {

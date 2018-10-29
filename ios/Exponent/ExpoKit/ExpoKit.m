@@ -152,6 +152,7 @@ NSString * const EXAppDidRegisterUserNotificationSettingsNotification = @"kEXApp
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandler {
   // ToDo add here background task execution
+  completionHandler(UIBackgroundFetchResultNoData);
 }
 
 #pragma mark - deep linking hooks
