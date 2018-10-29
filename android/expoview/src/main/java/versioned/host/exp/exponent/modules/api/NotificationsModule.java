@@ -9,12 +9,14 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.sun.tools.internal.jxc.ap.Const;
 
 import host.exp.exponent.Constants;
 import host.exp.exponent.analytics.EXL;
@@ -26,7 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -61,6 +65,34 @@ public class NotificationsModule extends ReactContextBaseJavaModule {
   @Override
   public String getName() {
     return "ExponentNotifications";
+  }
+
+  @ReactMethod
+  public void putCategory(final String categoryIdParam, final ReadableArray actions, final Promise promise) {
+    String categoryId = getScopedIdIfDateached(categoryIdParam);
+    ArrayList<HashMap<String, Object>> scopedActions = new ArrayList<>();
+
+    for(Object actionObject : actions.toArrayList()) {
+      HashMap<String, Object> action = ((ReadableMap) actionObject).toHashMap();
+      String oldActionId = (String)action.get("actionId");
+      action.put("actionId", getScopedIdIfDateached(oldActionId));
+      scopedActions.add(action);
+    }
+
+    NotificationActionCenter.put(categoryId, scopedActions, getReactApplicationContext());
+    promise.resolve(null);
+  }
+
+  private String getScopedIdIfDateached(String categoryId) {
+    if (!Constants.isDetached()) {
+      try {
+        String experienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY);
+        return ( experienceId + ":" + categoryId );
+      } catch (JSONException e) {
+        e.printStackTrace();
+      }
+    }
+    return categoryId;
   }
 
   @ReactMethod
