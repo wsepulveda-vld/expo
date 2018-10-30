@@ -27,7 +27,7 @@
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)(void))completionHandler
 {
-  BOOL isFromBackground = !([UIApplication sharedApplication].applicationState == UIApplicationStateActive);
+  BOOL isFromBackground = [UIApplication sharedApplication].applicationState != UIApplicationStateActive;
   NSDictionary *payload = response.notification.request.content.userInfo;
   if (payload) {
     NSDictionary *body = payload[@"body"];

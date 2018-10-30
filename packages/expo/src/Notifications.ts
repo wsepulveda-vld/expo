@@ -345,7 +345,7 @@ export default {
       if (Platform.OS === "ios" ) {
         warning(
           options.repeat == undefined,
-          'This function is deprecated for ios with repeat option'
+          'The "repeat" option for scheduled local notifications has been removed on iOS. Use "dateMatchingTriggerIOS" instead.'
         );
         return this.scheduleLocalNotificationWithMatchIOSAsync(
           notification,

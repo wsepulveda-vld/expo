@@ -11,7 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSString *actionName;
 @property (assign, nonatomic) int flags;
 - (UNNotificationAction *) getUNNotificationAction;
-+ (instancetype)parseFromParams:(NSDictionary *) array;
++ (instancetype)parseFromParams:(NSDictionary *) params;
 
 @end
 
