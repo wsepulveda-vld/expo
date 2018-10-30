@@ -1,6 +1,6 @@
 // Copyright 2015-present 650 Industries. All rights reserved.
 
-package versioned.host.exp.exponent.modules.api;
+package versioned.host.exp.exponent.modules.api.notifications;
 
 import android.support.v4.app.NotificationManagerCompat;
 
@@ -16,7 +16,6 @@ import com.facebook.react.bridge.WritableMap;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.sun.tools.internal.jxc.ap.Const;
 
 import host.exp.exponent.Constants;
 import host.exp.exponent.analytics.EXL;
@@ -30,7 +29,6 @@ import org.json.JSONObject;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
