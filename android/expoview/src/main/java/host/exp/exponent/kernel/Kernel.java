@@ -5,6 +5,7 @@ package host.exp.exponent.kernel;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
+import android.app.RemoteInput;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,6 +78,7 @@ import expolib_v1.okhttp3.OkHttpClient;
 import versioned.host.exp.exponent.ExponentPackage;
 import versioned.host.exp.exponent.ReactUnthemedRootView;
 import versioned.host.exp.exponent.ReadableObjectUtils;
+import versioned.host.exp.exponent.modules.api.notifications.NotificationActionCenter;
 
 // TOOD: need to figure out when we should reload the kernel js. Do we do it every time you visit
 // the home screen? only when the app gets kicked out of memory?
@@ -510,6 +512,18 @@ public class Kernel extends KernelInterface {
       String notification = bundle.getString(KernelConstants.NOTIFICATION_KEY); // deprecated
       String notificationObject = bundle.getString(KernelConstants.NOTIFICATION_OBJECT_KEY);
       String notificationManifestUrl = bundle.getString(KernelConstants.NOTIFICATION_MANIFEST_URL_KEY);
+      String actionType = "DEFAULT_ACTION";
+      String inputText = null;
+
+      if (bundle.containsKey("actionType")) {
+        actionType = bundle.getString("actionType");
+      }
+
+      Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+      if (remoteInput != null) {
+        inputText = remoteInput.getCharSequence(NotificationActionCenter.KEY_TEXT_REPLY).toString();
+      }
+
       if (notificationManifestUrl != null) {
         openExperience(new KernelConstants.ExperienceOptions(notificationManifestUrl, intentUri == null ? notificationManifestUrl : intentUri, notification, ExponentNotification.fromJSONObjectString(notificationObject)));
         return;

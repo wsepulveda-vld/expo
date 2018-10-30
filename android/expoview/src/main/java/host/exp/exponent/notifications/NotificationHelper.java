@@ -48,6 +48,8 @@ import host.exp.exponent.storage.ExperienceDBObject;
 import host.exp.exponent.storage.ExponentDB;
 import host.exp.exponent.utils.ColorParser;
 import host.exp.expoview.R;
+import versioned.host.exp.exponent.modules.api.notifications.IntentProvider;
+import versioned.host.exp.exponent.modules.api.notifications.NotificationActionCenter;
 
 public class NotificationHelper {
 
@@ -492,6 +494,19 @@ public class NotificationHelper {
 
           PendingIntent contentIntent = PendingIntent.getActivity(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
           builder.setContentIntent(contentIntent);
+
+         if (data.containsKey("categoryId")) {
+           final String manifestUrl = experience.manifestUrl;
+           NotificationActionCenter.setCategory((String)data.get("categoryId"), builder, context, new IntentProvider() {
+             @Override
+             public Intent provide() {
+               Class activityClass = KernelConstants.MAIN_ACTIVITY_CLASS;
+               Intent intent = new Intent(context, activityClass);
+               intent.putExtra(KernelConstants.NOTIFICATION_MANIFEST_URL_KEY, manifestUrl);
+               return intent;
+             }
+           });
+         }
 
           int color = NotificationHelper.getColor(
               data.containsKey("color") ? (String) data.get("color") : null,

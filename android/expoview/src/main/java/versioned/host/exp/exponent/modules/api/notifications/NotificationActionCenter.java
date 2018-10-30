@@ -18,10 +18,10 @@ import java.util.UUID;
 
 import host.exp.expoview.BuildConfig;
 
-class NotificationActionCenter {
+public class NotificationActionCenter {
 
   private static final String SHARED_PREFERENCES_FILE = "com.expo.notification.action" + BuildConfig.APPLICATION_ID;
-  private static final String KEY_TEXT_REPLY = "notification_remote_input";
+  public static final String KEY_TEXT_REPLY = "notification_remote_input";
   private static ActionDatabase db;
   private static final String DATABASE_NAME = "expo.notification.action";
 

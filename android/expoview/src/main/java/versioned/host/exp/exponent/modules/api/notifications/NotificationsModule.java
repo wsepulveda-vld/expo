@@ -229,7 +229,14 @@ public class NotificationsModule extends ReactContextBaseJavaModule {
     HashMap<String, java.io.Serializable> details = new HashMap<>();
     String experienceId;
 
-    details.put("data", ((ReadableNativeMap) data).toHashMap());
+    HashMap<String, Object> hashMap = ((ReadableNativeMap) data).toHashMap();
+    if (hashMap.containsKey("categoryId")) {
+      hashMap.put("categoryId", getScopedIdIfDateached((String) hashMap.get("categoryId")));
+    }
+
+    details.put("data", hashMap);
+
+
 
     try {
       experienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY);
@@ -292,10 +299,15 @@ public class NotificationsModule extends ReactContextBaseJavaModule {
 
     int notificationId = new Random().nextInt();
 
+    HashMap<String, Object> hashMap = ((ReadableNativeMap) data).toHashMap();
+    if (hashMap.containsKey("categoryId")) {
+      hashMap.put("categoryId", getScopedIdIfDateached((String)hashMap.get("categoryId")));
+    }
+
     NotificationHelper.scheduleLocalNotification(
         getReactApplicationContext(),
         notificationId,
-        ((ReadableNativeMap) data).toHashMap(),
+        hashMap,
         ((ReadableNativeMap) options).toHashMap(),
         mManifest,
         new NotificationHelper.Listener() {
