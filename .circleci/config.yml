@@ -9,7 +9,7 @@ commands:
     steps:
       # ssh: used in circleci checkout steps
       # direnv: used to configure environment with .envrc files
-      - run: nix-env -iA nixpkgs.openssh nixpkgs.direnv
+      - run: nix-env -iA expo.openssh expo.direnv
       - run: mkdir -p ~/.config/direnv
       - run: echo -e "[whitelist]\nprefix = [ \"$HOME\" ]" > ~/.config/direnv/config.toml
       - run: echo 'eval "$(direnv export bash)"' >> ~/.bash_profile
@@ -51,7 +51,7 @@ commands:
     steps:
       - run:
           working_directory: << parameters.working_directory >>
-          command: for i in {1..5}; do nix run nixpkgs.yarn -c yarn << parameters.command >> && break || sleep 5; done
+          command: for i in {1..5}; do nix run expo.yarn -c yarn << parameters.command >> && break || sleep 5; done
 
 executors:
   # We add -l to all the shell commands to make it easier to use direnv
@@ -161,8 +161,8 @@ jobs:
       - fetch_cocoapods_specs
       - yarn:
           working_directory: ~/project/tools-public
-      - run: nix run nixpkgs.nodejs-8_x -c ~/project/tools-public/generate-files-ios.sh
-      - run: nix run nixpkgs.nodejs-8_x nixpkgs.fastlane -c fastlane ios create_simulator_build
+      - run: nix run expo.nodejs-8_x -c ~/project/tools-public/generate-files-ios.sh
+      - run: nix run expo.nodejs-8_x expo.fastlane -c fastlane ios create_simulator_build
 
   client_android:
     executor: android
