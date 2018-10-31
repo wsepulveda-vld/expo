@@ -23,8 +23,8 @@ public class ActionObject {
   @ColumnInfo(name = "is_authentication_required")
   private Boolean isAuthenticationRequired = false;
 
-  @ColumnInfo(name = "submit_button_tittle")
-  private String submitButtonTittle = "go";
+  @ColumnInfo(name = "submit_button_title")
+  private String submitButtonTitle = "go";
 
   @ColumnInfo(name = "placeholder")
   private String placeholder = "...";
@@ -40,12 +40,12 @@ public class ActionObject {
     this.containTextInput = containTextInput;
   }
 
-  public String getSubmitButtonTittle() {
-    return submitButtonTittle;
+  public String getSubmitButtonTitle() {
+    return submitButtonTitle;
   }
 
-  public void setSubmitButtonTittle(String submitButtonTittle) {
-    this.submitButtonTittle = submitButtonTittle;
+  public void setSubmitButtonTitle(String submitButtonTitle) {
+    this.submitButtonTitle = submitButtonTitle;
   }
 
   public String getPlaceholder() {
@@ -91,13 +91,13 @@ public class ActionObject {
 
   public void populateObjectWithDataFromMap(HashMap<String, Object> map) {
     this.actionId = (String)map.get("actionId");
-    this.buttonTitle = (String)map.get("buttonTittle");
+    this.buttonTitle = (String)map.get("buttonTitle");
     this.isDestructive = (Boolean)map.get("isDestructive");
     this.isAuthenticationRequired = (Boolean)map.get("isAuthenticationRequired");
     this.containTextInput = (map.get("textInput") != null);
     if (this.containTextInput) {
       this.placeholder = (String)map.get("placeholder");
-      this.submitButtonTittle = (String)map.get("submitButtonTittle");
+      this.submitButtonTitle = (String)map.get("submitButtonTitle");
     }
   }
 }
