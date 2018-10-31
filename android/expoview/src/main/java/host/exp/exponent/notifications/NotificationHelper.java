@@ -489,7 +489,7 @@ public class NotificationHelper {
                 intent.putExtra(KernelConstants.NOTIFICATION_MANIFEST_URL_KEY, experience.manifestUrl);
               }
 
-              String body = data.containsKey("data") ? JSONUtils.getJSONString(data.get("data")) : "";
+              final String body = data.containsKey("data") ? JSONUtils.getJSONString(data.get("data")) : "";
 
               final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(experienceId, body, id, false, false);
 
@@ -507,6 +507,9 @@ public class NotificationHelper {
                     Class activityClass = KernelConstants.MAIN_ACTIVITY_CLASS;
                     Intent intent = new Intent(context, activityClass);
                     intent.putExtra(KernelConstants.NOTIFICATION_MANIFEST_URL_KEY, manifestUrl);
+                    final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(experienceId, body, id, false, false);
+                    intent.putExtra(KernelConstants.NOTIFICATION_KEY, body); // deprecated
+                    intent.putExtra(KernelConstants.NOTIFICATION_OBJECT_KEY, notificationEvent.toJSONObject(null).toString());
                     return intent;
                   }
                 });

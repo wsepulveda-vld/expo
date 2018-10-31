@@ -527,7 +527,9 @@ public class Kernel extends KernelInterface {
       if (notificationManifestUrl != null) {
         ExponentNotification exponentNotification = ExponentNotification.fromJSONObjectString(notificationObject);
         exponentNotification.addActionType(actionType);
-        exponentNotification.addInputText(inputText);
+        if (inputText != null) {
+          exponentNotification.addInputText(inputText);
+        }
         openExperience(new KernelConstants.ExperienceOptions(notificationManifestUrl, intentUri == null ? notificationManifestUrl : intentUri, notification, exponentNotification));
         return;
       }
