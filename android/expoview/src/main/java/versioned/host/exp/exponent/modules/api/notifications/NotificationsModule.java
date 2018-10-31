@@ -66,7 +66,7 @@ public class NotificationsModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void putCategory(final String categoryIdParam, final ReadableArray actions, final Promise promise) {
+  public void createCategory(final String categoryIdParam, final ReadableArray actions, final Promise promise) {
     String categoryId = getScopedIdIfDateached(categoryIdParam);
     ArrayList<HashMap<String, Object>> scopedActions = new ArrayList<>();
 

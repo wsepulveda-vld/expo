@@ -64,7 +64,6 @@ import BranchScreen from '../screens/BranchScreen';
 import SMSScreen from '../screens/SMSScreen';
 import ScreensScreen from '../screens/Screens';
 import PermissionsScreen from '../screens/PermissionsScreen';
-import ViewShotScreen from '../screens/ViewShotScreen';
 import UserNotificationsScreen from '../screens/UserNotifications';
 
 const styles = StyleSheet.create({
@@ -166,7 +165,6 @@ const ExpoApisStackNavigator = createStackNavigator(
     TextToSpeech: { screen: TextToSpeechScreen },
     Util: { screen: UtilScreen },
     WebBrowser: { screen: WebBrowserScreen },
-    ViewShot: { screen: ViewShotScreen },
   },
   StackConfig
 );

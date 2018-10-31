@@ -2,8 +2,8 @@ package versioned.host.exp.exponent.modules.api.notifications;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 
 import java.util.HashMap;
 

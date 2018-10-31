@@ -70,7 +70,7 @@ public class NotificationActionCenter {
     intent.putExtra("actionType", actionId);
     PendingIntent pendingIntent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-    NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder(expo.core.R.drawable.notification_icon,
+    NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder(android.R.drawable.sym_def_app_icon,
         actionObject.getButtonTitle(),
         pendingIntent
     );
