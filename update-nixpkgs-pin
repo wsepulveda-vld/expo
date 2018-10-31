@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -I . --packages nix-prefetch-git
+#!nix-shell -i bash -I nix --packages nix-prefetch-git
 set -euo pipefail
 
 # This file updates "nixpkgs.json" with information on latest tested commit of
